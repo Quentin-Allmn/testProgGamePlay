@@ -3,7 +3,7 @@ class Player {
     constructor(scene) {
         this.scene = scene
         this.pousse=false
-        this.player = this.scene.physics.add.sprite(40, 300, 'player');
+        this.player = this.scene.physics.add.sprite(40, 350, 'player');
         this.player.key=0
         this.player.setBounce(0.1).setVelocityX(0);
         this.scene.physics.add.collider(this.player, this.scene.platforms);

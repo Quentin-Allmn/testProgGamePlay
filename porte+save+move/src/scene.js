@@ -11,6 +11,7 @@ class scene extends Phaser.Scene {
     this.load.image('spike', 'assets/images/spike.png');
     this.load.image('move', 'assets/images/mouvable.png');
     this.load.image('save', 'assets/images/Save.png');
+      this.load.image('luciole3', 'assets/images/luciole3.png');
     // At last image must be loaded with its JSON
     this.load.atlas('player', 'assets/images/kenney_player.png', 'assets/images/kenney_player_atlas.json');
     this.load.image('tiles', 'assets/tilesets/platformPack_tilesheet.png');
@@ -104,6 +105,25 @@ this.trous = this.physics.add.group({
     this.cursors = this.input.keyboard.createCursorKeys();
     this.cameras.main.startFollow(this.player.player);
 
+
+
+    /** particules */
+
+    this.configFX1 = {
+        rotate: {min: 0, max: 360},
+        scale: {start: 0.2, end: 0.1},
+        alpha: {start: 1, end: 0},
+        blendMode: Phaser.BlendModes.ADD,
+        speed: 12
+    }
+
+      map.getObjectLayer('Luciole1').objects.forEach((luciole1) => {
+          this.luciole1Sprite = this.luciole1.create(60, 350, 'luciole1');
+          this.luciole1SpriteFX = this.add.particles('luciole3')//On charge les particules à appliquer au layer
+          this.luciole1SpriteFX.createEmitter(this.configFX1)
+          this.luciole1SpriteFX.x = this.luciole1Sprite.x
+          this.luciole1SpriteFX.y = this.luciole1Sprite.y
+      });
 
   }
 
