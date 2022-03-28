@@ -38,7 +38,8 @@ class scene extends Phaser.Scene {
     const map = this.make.tilemap({key: 'map'});
     const tileset = map.addTilesetImage('platformPack_tilesheet', 'tiles');
     this.platforms = map.createStaticLayer('Platforms', tileset, 0, 200);
-    this.platforms.setCollisionByProperty({collides:true})
+    this.platforms.setCollisionByProperty({collides:true});
+    this.platforms.setCollisionByExclusion(-1, true);
 
     /**
      * on créer les multiple groupe des layers objets
@@ -50,9 +51,9 @@ class scene extends Phaser.Scene {
       immovable: true
     })
     map.getObjectLayer('Door').objects.forEach((doors)=>{
-      const DoorSprite = this.doors.create(doors.x, doors.y +9+ doors.height, 'door').setOrigin(0).key=1;
+      const DoorSprite = this.doors.create(2560, 455, 'door').setOrigin(0).key=1;
     });
-    this.debug=this.doors.children.entries[1].key=3//cette porte nécessite 3 clefs
+    //this.debug=this.doors.children.entries[1].key=3//cette porte nécessite 3 clefs
 
 /** groupe des clefs */
     this.key=this.physics.add.group({
@@ -62,8 +63,6 @@ class scene extends Phaser.Scene {
     map.getObjectLayer('key').objects.forEach((key)=>{
       const keySprite = this.key.create(key.x, key.y +200- key.height, 'key').setOrigin(0).key=1;
     });
-
-
 
 /** groupe des objets déplaçable*/
     this.moves = this.physics.add.group({
@@ -116,9 +115,13 @@ this.trous = this.physics.add.group({
         blendMode: Phaser.BlendModes.ADD,
         speed: 12
     }
+      this.luciole1 = this.physics.add.group({
+          allowGravity: false,
+          immovable: true
+      });
 
       map.getObjectLayer('Luciole1').objects.forEach((luciole1) => {
-          this.luciole1Sprite = this.luciole1.create(60, 350, 'luciole1');
+          this.luciole1Sprite = this.luciole1.create(100, 350, 'luciole1');
           this.luciole1SpriteFX = this.add.particles('luciole3')//On charge les particules à appliquer au layer
           this.luciole1SpriteFX.createEmitter(this.configFX1)
           this.luciole1SpriteFX.x = this.luciole1Sprite.x
