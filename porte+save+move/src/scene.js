@@ -11,7 +11,8 @@ class scene extends Phaser.Scene {
     this.load.image('spike', 'assets/images/spike.png');
     this.load.image('move', 'assets/images/mouvable.png');
     this.load.image('save', 'assets/images/Save.png');
-      this.load.image('luciole3', 'assets/images/luciole3.png');
+    this.load.image('luciole3', 'assets/images/luciole3.png');
+    this.load.image("sword", "assets/images/sword.png");
     // At last image must be loaded with its JSON
     this.load.atlas('player', 'assets/images/kenney_player.png', 'assets/images/kenney_player_atlas.json');
     this.load.image('tiles', 'assets/tilesets/platformPack_tilesheet.png');
@@ -121,12 +122,33 @@ this.trous = this.physics.add.group({
       });
 
       map.getObjectLayer('Luciole1').objects.forEach((luciole1) => {
-          this.luciole1Sprite = this.luciole1.create(100, 350, 'luciole1');
+          this.luciole1Sprite = this.luciole1.create(150, 350, 'luciole1');
           this.luciole1SpriteFX = this.add.particles('luciole3')//On charge les particules à appliquer au layer
           this.luciole1SpriteFX.createEmitter(this.configFX1)
           this.luciole1SpriteFX.x = this.luciole1Sprite.x
           this.luciole1SpriteFX.y = this.luciole1Sprite.y
       });
+
+      // Attaque
+      this.sword = this.physics.add.sprite(300, 300, "sword").setScale(.1);
+      this.sword.body.setAllowGravity(false);
+      this.sword.setDepth(1);
+      this.sword.setVisible(false);
+      this.sword.attack = 100;
+      this.sword.disableBody()
+
+      //Quand on clique avec la souris on fait apparaitre l'épée
+      this.input.on('pointerdown', function (pointer) {
+
+          //On rend l'épée visible
+          this.sword.setVisible(true);
+          //On active le body de l'épée
+          this.sword.enableBody()
+          //On ajoute un event avec un delay qui fera disparaitre l'épée pendant 250 ms
+          this.time.addEvent({ delay: 250, callback: this.onEvent, callbackScope: this });
+
+      }, this);
+
 
   }
 
@@ -159,6 +181,11 @@ this.trous = this.physics.add.group({
     });
   }
 
+    onEvent()
+    {
+        this.sword.disableBody()
+        this.sword.setVisible(false);
+    }
 
   update() {
       if (this.player.pousse ){
@@ -167,6 +194,8 @@ this.trous = this.physics.add.group({
       else {
           this.moves.setVelocityX(0)
       }
+      this.sword.x = this.player.x+40;
+      this.sword.y = this.player.y;
 
 
 
